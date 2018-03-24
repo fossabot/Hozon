@@ -1,28 +1,120 @@
+.flex-container,
+body,
+html {
+  height: 100%;
+}
+
 body {
-  background: #3f3f3f;
-  color: #fff;
-  box-sizing: border-box;
-  text-align: center;
+  background : #3f3f3f;
+  color      : #fff;
+  box-sizing : border-box;
+  text-align : center;
+  font-family: serif;
+  font-weight: 200;
+  margin     : 0;
+  font-family: monospace;
+}
+
+h1 {
+  text-transform: uppercase;
 }
 
 .flex-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display       : flex;
+  align-items   : center;
+  flex-direction: column;
 }
 
 .box {
-  width: 50%;
-  min-height: 150px;
-  border: red 1px dotted;
+  width     : 100%;
+  min-height: 25vh;
+  /*border: red 1px dotted;*/
 }
-#source-path{
+
+.source {
+  display        : flex;
+  justify-content: center;
+  align-items    : center;
+  background     : #ec9ec4;
+  color          : #fff;
+  flex-direction : column;
+}
+
+#source-button {
+  background-color: none;
+}
+
+.copy-container {
+  display        : flex;
+  flex-direction : row;
+  justify-content: center;
+}
+
+.copy-container > div {
+  width  : 50%;
+  padding: 0 30px;
+}
+
+.copy-container > div:first-child {
+  text-align: right;
+}
+
+.copy-container > div:last-child {
+  text-align: left;
+}
+
+.copy-path {
+  margin-top: 40px;
+  width     : 100%;
+}
+
+.copy-box {
+  display        : flex;
+  justify-content: center;
+  align-content  : center;
+  flex-direction : column;
+  width          : 100%;
+}
+
+.copy-box > div {
+  margin: 10px 0;
+}
+
+.result{
+  display: flex;
+  flex-direction: column;
+}
+
+.copy-button {
+  display    : inline-block;
+  height     : 65px;
+  width      : 65px;
+  background : #00ceff;
+  line-height: 65px;
+  text-align : center;
+}
+
+#source-path {
   min-height: 1em;
-  min-width: 1em;
+  min-width : 1em;
 }
-progress{
-  margin: 50px;
-  width: 500px;
-  max-width: 100%;
-  height: 15px;
+
+#doCopy {
+  max-height    : 100%;
+  padding       : 15px 25px;
+  text-transform: uppercase;
+  background    : #ffce70;
+  color         : #000;
+  width         : 100px;
+  align-self    : center;
+}
+
+a {
+  transition: all .2s;
+}
+
+a:active {
+  position  : relative;
+  top       : 2px;
+  transition: all .2s;
 }

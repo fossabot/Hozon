@@ -55,13 +55,13 @@
       secondResult.innerHTML = "Seconde copie en cours";
 
       fs.copy(copySource, copyPathOne, (err) => {
-      if (err) return console.error(err);
+      if (err) return firstResult.innerHTML = "<span style=\"color:yellow\">ERREUR LORS DE LA PREMIÈRE COPIE<br /></span>" + err;
       firstResult.innerHTML = "Première copie faite avec succès";
       console.log('1 - Yay!');
     })
 
     fs.copy(copySource, copyPathTwo, (err) => {
-    if (err) return console.error(err);
+    if (err) return secondResult.innerHTML = "<span style=\"color:yellow\">ERREUR LORS DE LA SECONDE COPIE<br /></span>" + err;
     secondResult.innerHTML = "Seconde copie faite avec succès";
     console.log('2 - Yay!');
 
@@ -73,31 +73,40 @@
 <body>
   <div class="flex-container">
     <div class="box source">
-      <h1 class="title-source">Copier depuis</h1>
-      <button id="source-button" onclick="getSource()">Choisir...</button>
+      <h1>depuis</h1>
+      <a id="source-button" onclick="getSource()"><img src="img/folder.svg" alt="Folder icon" width="100" /></a>
       <div id="source-path">
 
       </div>
     </div>
+    <img src="img/fleche.svg" alt="flèche gauche vers le bas" height="200" class="box"/>
     <div class="box destination">
       <h1 class="title-dest">Vers</h1>
-      <button id="dest-button-one" onclick="getDestOne()">Choisir...</button>
-      <div id="copy-path-one">
+      <div class="copy-container">
+        <div>
+          <a class="copy-button" id="dest-button-one" onclick="getDestOne()">1</a>
+          <div id="copy-path-one" class="copy-path">
+
+          </div>
+        </div>
+        <div>
+          <a class="copy-button" id="dest-button-two" onclick="getDestTwo()">2</a>
+          <div id="copy-path-two" class="copy-path">
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="copy-box">
+      <a id="doCopy" onclick="doCopy()">Copier</a>
+      <div id="first-result" class="result">
 
       </div>
-      <button id="dest-button-two" onclick="getDestTwo()">Choisir...</button>
-      <div id="copy-path-two">
+      <div id="second-result" class="result">
 
       </div>
+    <!--progress></progress-->
     </div>
   </div>
-    <button id="doCopy" onclick="doCopy()">Copier</button>
-    <div id="first-result">
-
-    </div>
-    <div id="second-result">
-
-    </div>
-  <!--progress></progress-->
 </body>
 </html>

@@ -23,7 +23,7 @@
       var copyPath = dialog.showOpenDialog({
         properties: ['openDirectory']
       });
-      document.getElementById('copy-path-one').innerHTML = copyPath;
+      document.getElementById('copy-path-one').setAttribute("value", copyPath);
       document.getElementsByName('copy-path-one').value = copyPath;
       console.log(copyPath);
     }
@@ -34,7 +34,7 @@
       var copyPath = dialog.showOpenDialog({
         properties: ['openDirectory']
       });
-      document.getElementById('copy-path-two').innerHTML = copyPath;
+      document.getElementById('copy-path-two').setAttribute("value", copyPath);
       document.getElementsByName('copy-path-two').value = copyPath;
       console.log(copyPath);
     }
@@ -85,14 +85,18 @@
       <div class="copy-container">
         <div>
           <a class="copy-button" id="dest-button-one" onclick="getDestOne()">1</a>
-          <div id="copy-path-one" class="copy-path">
-
+          <div class="copy-path">
+            <form>
+              <input id="copy-path-one" type="text" value=""/>
+            </form>
           </div>
         </div>
         <div>
           <a class="copy-button" id="dest-button-two" onclick="getDestTwo()">2</a>
-          <div id="copy-path-two" class="copy-path">
-
+          <div class="copy-path">
+            <form>
+              <input id="copy-path-two" type="text" value="" />
+            </form>
           </div>
         </div>
       </div>

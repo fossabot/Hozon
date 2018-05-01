@@ -5,80 +5,22 @@
   <meta charset="utf-8">
   <title>Hozon</title>
   <link href="main.css" type="text/css" rel="stylesheet" />
-  <script>
-    function getSource(){
-      const {dialog} = require('electron').remote;
-
-      var sourcePath = dialog.showOpenDialog({
-        properties: ['openDirectory']
-      });
-      document.getElementById('source-path').innerHTML = sourcePath;
-      document.getElementsByName('copy-source').value = sourcePath;
-      console.log(sourcePath);
-    }
-
-    function getDestOne(){
-      const {dialog} = require('electron').remote;
-
-      var copyPath = dialog.showOpenDialog({
-        properties: ['openDirectory']
-      });
-      document.getElementById('copy-path-one').setAttribute("value", copyPath);
-      document.getElementsByName('copy-path-one').value = copyPath;
-      console.log(copyPath);
-    }
-
-    function getDestTwo(){
-      const {dialog} = require('electron').remote;
-
-      var copyPath = dialog.showOpenDialog({
-        properties: ['openDirectory']
-      });
-      document.getElementById('copy-path-two').setAttribute("value", copyPath);
-      document.getElementsByName('copy-path-two').value = copyPath;
-      console.log(copyPath);
-    }
-
-    function doCopy(){
-      const fs = require('fs-extra');
-
-      var copySource = document.getElementById('source-path').innerHTML;
-      var copyPathOne = document.getElementById('copy-path-one').innerHTML;
-      var copyPathTwo = document.getElementById('copy-path-two').innerHTML;
-      console.log(copySource);
-      console.log(copyPathOne);
-      console.log(copyPathTwo);
-
-      var firstResult = document.getElementById('first-result');
-      firstResult.innerHTML = "Première copie en cours";
-      var secondResult = document.getElementById('second-result');
-      secondResult.innerHTML = "Seconde copie en cours";
-
-      fs.copy(copySource, copyPathOne, (err) => {
-      if (err) return firstResult.innerHTML = "<span style=\"color:yellow\">ERREUR LORS DE LA PREMIÈRE COPIE<br /></span>" + err;
-      firstResult.innerHTML = "Première copie faite avec succès";
-      console.log('1 - Yay!');
-    })
-
-    fs.copy(copySource, copyPathTwo, (err) => {
-    if (err) return secondResult.innerHTML = "<span style=\"color:yellow\">ERREUR LORS DE LA SECONDE COPIE<br /></span>" + err;
-    secondResult.innerHTML = "Seconde copie faite avec succès";
-    console.log('2 - Yay!');
-
-});
-    }
-  </script>
+  <!-- Scripts include -->
+  <script src="js/copySource.js"></script>
+  <script src="js/doCopy.js"></script>
 </head>
 
 <body>
   <div class="flex-container">
     <div class="box source">
       <h1>depuis</h1>
-      <a id="source-button" onclick="getSource()"><img src="img/folder.svg" alt="Folder icon" width="100" /></a>
+      <a id="source-button" onclick="copySource()"><img src="img/folder.svg" alt="Folder icon" width="100" /></a>
       <div id="source-path">
-
-      </div>
+        <form>
+          <input id="copyFrom" type="text" value="" placeholder="..." />
+        </form>
     </div>
+  </div>
     <img src="img/fleche.svg" alt="flèche gauche vers le bas" height="200" class="box"/>
     <div class="box destination">
       <h1 class="title-dest">Vers</h1>

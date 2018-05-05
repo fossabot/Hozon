@@ -15,7 +15,9 @@ function copySource() {
   //List files
   copyFrom = copyFrom.toString(); //Converts path to string
   const temp = app.getPath('desktop') + '/copyList.xml'; // TEMP
-  fs.unlink(temp); //Remove existing file
+  if (fs.lstatSync(temp).isFile()) {
+    fs.unlink(temp); //Remove existing file
+  }
   const listFiles = fs.createWriteStream(temp, {'flags': 'a'});
 
   function walk(copyFrom) {

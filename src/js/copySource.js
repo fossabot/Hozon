@@ -15,7 +15,7 @@ function copySource() {
   //List files
   copyFrom = copyFrom.toString(); //Converts path to string
   const temp = app.getPath('desktop') + '/copyList.xml'; // TEMP
-  if (fs.lstatSync(temp).isFile()) {
+  if (fs.existsSync(temp)) {
     fs.unlink(temp); //Remove existing file
   }
   const listFiles = fs.createWriteStream(temp, {'flags': 'a'});
@@ -28,8 +28,10 @@ function copySource() {
       if (fs.lstatSync(fullPath).isDirectory()) {
         walk(fullPath);
       } else {
-        listFiles.write("+ " + fullPath + "\n");
+        let size = fs.statSync(fullPath).size;
+        listFiles.write(fullPath + " (" + size + ")\n");
         console.log(fullPath);
+        console.log(size);
       }
     });
   }

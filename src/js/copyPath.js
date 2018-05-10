@@ -9,15 +9,18 @@ function copyFrom() {
     properties: ['openDirectory'],
   });
 
-  //Store path
+  // Store path
   document.getElementById('copyFrom').value = copyFrom;
 
-  //List files
-  copyFrom = copyFrom.toString(); //Converts path to string
+  // List files
+  copyFrom = copyFrom.toString(); // Converts path to string
   const temp = app.getPath('desktop') + '/copyList.xml'; // TEMP
+  // Check wether a copy list already exists
   if (fs.existsSync(temp)) {
-    fs.unlink(temp); //Remove existing file
+    fs.unlink(temp); // Remove existing file
   }
+  // Create write stream to list files
+  // 'a' flag stands for 'append'
   const listFiles = fs.createWriteStream(temp, {'flags': 'a'});
 
   function walk(dir) {
@@ -28,15 +31,13 @@ function copyFrom() {
       if (fs.lstatSync(fullPath).isDirectory()) {
         walk(fullPath);
       } else {
-        let size = fs.statSync(fullPath).size;
-        listFiles.write(fullPath + " (" + size + ")\n");
-        console.log(fullPath);
-        console.log(size);
+        let size = fs.statSync(fullPath).size;// Get size of file
+        listFiles.write(fullPath + " (" + size + ")\n");// Write file path and size into copyList.xml
       }
     });
   }
-  walk(copyFrom);
 
+  walk(copyFrom);// Starts function "walk"
 }
 
 function getDestOne() {

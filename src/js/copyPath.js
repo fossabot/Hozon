@@ -23,19 +23,28 @@ function copyFrom() {
   // 'a' flag stands for 'append'
   const listFiles = fs.createWriteStream(temp, {'flags': 'a'});
 
+function walk(dir){
+  let n = 0;
   function walk(dir) {
+
     fs.readdirSync(dir).forEach(file => {
 
+      ++n;
+      console.log(n);
       let fullPath = path.join(dir, file);
 
       if (fs.lstatSync(fullPath).isDirectory()) {
+        --n;
         walk(fullPath);
       } else {
         let size = fs.statSync(fullPath).size;// Get size of file
         listFiles.write(fullPath + " (" + size + ")\n");// Write file path and size into copyList.xml
       }
+
     });
   }
+  return walk(dir);
+}
 
   walk(copyFrom);// Starts function "walk"
 }

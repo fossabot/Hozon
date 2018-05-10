@@ -1,4 +1,4 @@
-function copySource() {
+function copyFrom() {
   const {dialog} = require('electron').remote;
   const {app} = require('electron').remote;
   const fs = require('fs');
@@ -20,10 +20,10 @@ function copySource() {
   }
   const listFiles = fs.createWriteStream(temp, {'flags': 'a'});
 
-  function walk(copyFrom) {
-    fs.readdirSync(copyFrom).forEach(file => {
+  function walk(dir) {
+    fs.readdirSync(dir).forEach(file => {
 
-      let fullPath = path.join(copyFrom, file);
+      let fullPath = path.join(dir, file);
 
       if (fs.lstatSync(fullPath).isDirectory()) {
         walk(fullPath);
@@ -37,4 +37,26 @@ function copySource() {
   }
   walk(copyFrom);
 
+}
+
+function getDestOne() {
+  const {dialog} = require('electron').remote;
+
+  var copyPath = dialog.showOpenDialog({
+    properties: ['openDirectory']
+  });
+
+  document.getElementById('copy-path-one').setAttribute("value", copyPath);
+  console.log(copyPath);
+}
+
+function getDestTwo() {
+  const {dialog} = require('electron').remote;
+
+  var copyPath = dialog.showOpenDialog({
+    properties: ['openDirectory']
+  });
+
+  document.getElementById('copy-path-two').setAttribute("value", copyPath);
+  console.log(copyPath);
 }

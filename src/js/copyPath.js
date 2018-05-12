@@ -1,8 +1,9 @@
 function copyFrom() {
-  const {dialog} = require('electron').remote;
-  const {app} = require('electron').remote;
-  const fs = require('fs');
-  const path = require('path');
+  const
+    {dialog} = require('electron').remote,
+    {app} = require('electron').remote,
+    fs = require('fs'),
+    path = require('path');
 
   // Select a directory
   let copyFrom = dialog.showOpenDialog({
@@ -24,21 +25,25 @@ function copyFrom() {
   const listFiles = fs.createWriteStream(temp, {'flags': 'a'});
 
 function walk(dir){
-  let n = 0;
+  let
+    n = 0,
+    size = 0,
+    totalSize = 0;
+
   function walk(dir) {
 
     fs.readdirSync(dir).forEach(file => {
 
-      ++n;
-      console.log(n);
       let fullPath = path.join(dir, file);
+      ++n;
 
       if (fs.lstatSync(fullPath).isDirectory()) {
         --n;
         walk(fullPath);
       } else {
-        let size = fs.statSync(fullPath).size;// Get size of file
-        listFiles.write(fullPath + " (" + size + ")\n");// Write file path and size into copyList.xml
+        size =+ fs.statSync(fullPath).size;// Get size of file
+        totalSize += size; // Calculate total size
+        listFiles.write(fullPath + "\n");// Write file path into copyList.xml
       }
 
     });

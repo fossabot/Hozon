@@ -5,53 +5,56 @@ function copyFrom() {
     fs = require('fs'),
     path = require('path');
 
-  // Select a directory
+  //Select a directory
   let copyFrom = dialog.showOpenDialog({
     properties: ['openDirectory'],
   });
 
-  // Store path
-  document.getElementById('copyFrom').value = copyFrom;
+  document.getElementById('copyFrom').value = copyFrom;//Write path in form input
+  copyFrom = copyFrom.toString(); //Converts path to string
 
-  // List files
-  copyFrom = copyFrom.toString(); // Converts path to string
-  const temp = app.getPath('desktop') + '/copyList.xml'; // TEMP
-  // Check wether a copy list already exists
-  if (fs.existsSync(temp)) {
-    fs.unlink(temp); // Remove existing file
-  }
-  // Create write stream to list files
-  // 'a' flag stands for 'append'
-  const listFiles = fs.createWriteStream(temp, {'flags': 'a'});
-
-function walk(dir){
   let
     n = 0,
     size = 0,
-    totalSize = 0;
+    totalSize = 0,
+    fileList = [];
 
-  function walk(dir) {
+  function recursiveWalk(dir) {
 
     fs.readdirSync(dir).forEach(file => {
 
       let fullPath = path.join(dir, file);
-      ++n;
 
       if (fs.lstatSync(fullPath).isDirectory()) {
-        --n;
-        walk(fullPath);
+        recursiveWalk(fullPath);
       } else {
-        size =+ fs.statSync(fullPath).size;// Get size of file
-        totalSize += size; // Calculate total size
-        listFiles.write(fullPath + "\n");// Write file path into copyList.xml
+        size = fs.statSync(fullPath).size; //Get size of file
+        totalSize += size; //Calculate total size
+        fileList.push(fullPath); //Add copy path into array fileList
       }
 
     });
+
+    return fileList;
   }
-  return walk(dir);
+
+  recursiveWalk(copyFrom);//Starts function "walk"
+
+  document.getElementById('file-list').innerHTML = fileList.length + " fichiers à copier.";
+  document.getElementById('total-size').innerHTML = "Taille totale : " + convertSize(totalSize);
+  console.log(fileList.join('\n'));// TEMP
 }
 
-  walk(copyFrom);// Starts function "walk"
+function convertSize (size) {
+    // Make size human-readable
+    let i = -1;
+    const byteUnits = [' ko', ' Mo', ' Go', ' To', ' Po', ' Eo', ' Zo', ' Yo'];
+    do {
+      size = size / 1000;
+      i++;
+    } while (size > 1000);
+
+    return size = Math.max(size, 0.1).toFixed(1) + byteUnits[i]; //Return size
 }
 
 function getDestOne() {

@@ -13,15 +13,24 @@
 <body>
   <div class="flex-container">
     <div class="box source">
-      <h1>depuis</h1>
-      <a id="source-button" onclick="copyFrom()"><img src="img/folder.svg" alt="Folder icon" width="100" /></a>
-      <div id="source-path">
-        <form>
-          <input id="copyFrom" type="text" value="" placeholder="..." />
-        </form>
+        <h1>depuis</h1>
+        <a id="source-button" onclick="copyFrom()"><img src="img/folder.svg" alt="Folder icon" width="100" /></a>
+        <div id="source-path">
+          <form>
+            <input id="copyFrom" type="text" value="" placeholder="..." />
+          </form>
+        </div>
     </div>
-  </div>
-    <img src="img/fleche.svg" alt="flèche gauche vers le bas" height="200" class="box"/>
+
+    <img src="img/fleche.svg" alt="flèche gauche vers le bas" height="200" class="box" />
+    <div id="copy-info">
+      <div id="file-list">
+
+      </div>
+      <div id="total-size">
+
+      </div>
+    </div>
     <div class="box destination">
       <h1 class="title-dest">Vers</h1>
       <div class="copy-container">
@@ -29,7 +38,7 @@
           <a class="copy-button" id="dest-button-one" onclick="getDestOne()">1</a>
           <div class="copy-path">
             <form>
-              <input id="copy-path-one" type="text" value="" placeholder="..."/>
+              <input id="copy-path-one" type="text" value="" placeholder="..." />
             </form>
           </div>
         </div>
@@ -51,8 +60,9 @@
       <div id="second-result" class="result">
 
       </div>
-    <!--progress></progress-->
+      <!--progress></progress-->
     </div>
   </div>
 </body>
+
 </html>

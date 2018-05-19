@@ -45,6 +45,27 @@ function copyFrom() {
   console.log(fileList.join('\n'));// TEMP
 }
 
+
+function copyDest (n) {
+  const {dialog} = require('electron').remote;
+
+  var copyPath = dialog.showOpenDialog({
+    properties: ['openDirectory']
+  });
+
+  if (n == 1) {
+    document.getElementById('copy-path-one').setAttribute("value", copyPath);
+
+    return copyPath;
+  }
+  if (n == 2) {
+    document.getElementById('copy-path-two').setAttribute("value", copyPath);
+
+    return copyPath;
+  }
+
+}
+
 function convertSize (size) {
     // Make size human-readable
     let i = -1;
@@ -55,26 +76,4 @@ function convertSize (size) {
     } while (size > 1000);
 
     return size = Math.max(size, 0.1).toFixed(1) + byteUnits[i]; //Return size
-}
-
-function getDestOne() {
-  const {dialog} = require('electron').remote;
-
-  var copyPath = dialog.showOpenDialog({
-    properties: ['openDirectory']
-  });
-
-  document.getElementById('copy-path-one').setAttribute("value", copyPath);
-  console.log(copyPath);
-}
-
-function getDestTwo() {
-  const {dialog} = require('electron').remote;
-
-  var copyPath = dialog.showOpenDialog({
-    properties: ['openDirectory']
-  });
-
-  document.getElementById('copy-path-two').setAttribute("value", copyPath);
-  console.log(copyPath);
 }

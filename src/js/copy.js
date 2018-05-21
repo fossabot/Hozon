@@ -4,7 +4,8 @@ const {dialog} = require('electron').remote,
   path = require('path');
 
 let totalSize = 0,
-  fileList = [];
+  fileList = [],
+  fileName = [];
 
 function copyFrom() {
 
@@ -16,34 +17,12 @@ function copyFrom() {
   document.getElementById('copyFrom').value = copyFrom; //Write path in form input
   copyFrom = copyFrom.toString(); //Converts path to string
 
-  let
-    n = 0,
-    size = 0;
-
-  function recursiveWalk(dir) {
-
-    fs.readdirSync(dir).forEach(file => {
-
-      let fullPath = path.join(dir, file);
-
-      if (fs.lstatSync(fullPath).isDirectory()) {
-        recursiveWalk(fullPath);
-      } else {
-        size = fs.statSync(fullPath).size; //Get size of file
-        totalSize += size; //Calculate total size
-        fileList.push(fullPath); //Add copy path into array fileList
-      }
-
-    });
-
-    return fileList;
-  }
-
-  recursiveWalk(copyFrom); //Starts function "walk"
+  walk(copyFrom); //Starts function
 
   document.getElementById('file-list').innerHTML = fileList.length + " fichiers à copier.";
   document.getElementById('total-size').innerHTML = "Taille totale : " + convertSize(totalSize);
-  console.log(fileList.join('\n')); // TEMP
+
+  return {fileList: fileList, fileName: fileName};
 }
 
 
@@ -77,26 +56,56 @@ function doCopy() {
   const firstResult = document.getElementById('first-result'),
     secondResult = document.getElementById('second-result');
 
-  let n = 0,
-    i = n - 1;
+  let i = 0;
 
   //Check wether a valid copy path exists
   if (!copySource || !copyPathOne || !copyPathTwo) {
-    //Displays errors to user
-    alert("ERREUR : Un des chemins de copie est invalide")
+
+    alert("ERREUR : Un des chemins de copie est invalide"); // Displays errors to user
   } else {
     firstResult.innerHTML = "Première copie en cours";
     secondResult.innerHTML = "Seconde copie en cours";
 
     //Launch copy process
     do {
-        writeStream = fs.createWriteStream(path.join(copyPathOne, "test.xml"));
-      ++n;
-      writeStream.write(fileList[i]);
+      let writeStream = fs.createWriteStream(path.join(copyPathOne, fileName[i]));
 
-    } while (n < fileList.length);
+      writeStream.write(fileList[i]); // BUG: copy path into file instead of file content
+      console.log(fileName.join('\n')); // TEMP
+      ++i;
+
+    } while (i < fileList.length);
 
   }
+}
+
+function walk(dir) {
+  let
+    n = 0,
+    size = 0;
+
+  recursiveWalk(dir);
+
+  function recursiveWalk(dir) {
+
+    fs.readdirSync(dir).forEach(file => {
+
+      let fullPath = path.join(dir, file);
+
+      if (fs.lstatSync(fullPath).isDirectory()) {
+        recursiveWalk(fullPath);
+      } else {
+        size = fs.statSync(fullPath).size; //Get size of file
+        totalSize += size; //Calculate total size
+        fileName.push(file); //Store file name
+        fileList.push(fullPath); //Add copy path into array fileList
+      }
+
+    });
+
+    return fileList;
+  }
+  return recursiveWalk;
 }
 
 function convertSize(size) {

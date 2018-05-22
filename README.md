@@ -1,5 +1,5 @@
 # Hozon
-<img src="https://travis-ci.org/Gasparbsurde/Hozon.svg?branch=master" alt="build: passing"/>
+<img src="https://travis-ci.org/Gasparbsurde/Hozon.svg?branch=master" alt="build: passing"/> <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="Standard - JavaScript Style Guide"></a>
 
 Hozon - système professionnel de double copie
 

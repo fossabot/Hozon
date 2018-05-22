@@ -10,7 +10,6 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint src --color",
-    "test": "electron-forge start --inspect-electron"
   },
   "keywords": [],
   "author": "Gasparbsurde [Gaspard Bariller]",

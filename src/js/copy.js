@@ -68,10 +68,13 @@ function doCopy() {
 
     //Launch copy process
     do {
-      let writeStream = fs.createWriteStream(path.join(copyPathOne, fileName[i]));
+      var readableStream = fs.createReadStream(fileList[i]);
+      var writableStream = fs.createWriteStream(copyPathOne, fileName[i]);
 
-      writeStream.write(fileList[i]); // BUG: copy path into file instead of file content
-      console.log(fileName.join('\n')); // TEMP
+      readableStream.pipe(writableStream);
+
+      //console.log('fileName : ' + fileName[i]); // TEMP
+      //console.log('fileList : ' + fileList[i]); // TEMP
       ++i;
 
     } while (i < fileList.length);

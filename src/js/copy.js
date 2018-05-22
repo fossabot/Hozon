@@ -1,147 +1,135 @@
-const {dialog} = require('electron').remote,
-  {app} = require('electron').remote,
+const {
+  dialog
+} = require('electron').remote, {
+    app
+  } = require('electron').remote,
   fs = require('fs'),
-  path = require('path');
+  path = require('path')
 
 let totalSize = 0,
   fileList = [],
-  fileName = [];
+  fileName = []
 
 function copyFrom() {
-
-  //Select a directory
+  // Select a directory
   let copyFrom = dialog.showOpenDialog({
-    properties: ['openDirectory'],
-  });
+    properties: ['openDirectory']
+  })
 
-  document.getElementById('copy-from').value = copyFrom; //Write path in form input
-  copyFrom = copyFrom.toString(); //Converts path to string
+  document.getElementById('copy-from').value = copyFrom // Write path in form input
+  copyFrom = copyFrom.toString() // Converts path to string
 
-  walk(copyFrom); //Starts function
+  walk(copyFrom) // Starts function
 
-  document.getElementById('file-list').innerHTML = fileList.length + " fichiers à copier.";
-  document.getElementById('total-size').innerHTML = "Taille totale : " + convertSize(totalSize);
+  document.getElementById('file-list').innerHTML = fileList.length + ' fichiers à copier.'
+  document.getElementById('total-size').innerHTML = 'Taille totale : ' + convertSize(totalSize)
 
-  return {fileList: fileList, fileName: fileName};
+  return {
+    fileList: fileList,
+    fileName: fileName
+  }
 }
 
-
 function copyDest(n) {
-
   var copyPath = dialog.showOpenDialog({
     properties: ['openDirectory']
-  });
+  })
 
   if (n == 1) {
-    document.getElementById('copy-path-one').setAttribute("value", copyPath);
+    document.getElementById('copy-path-one').setAttribute('value', copyPath)
 
-    return copyPath;
+    return copyPath
   }
   if (n == 2) {
-    document.getElementById('copy-path-two').setAttribute("value", copyPath);
+    document.getElementById('copy-path-two').setAttribute('value', copyPath)
 
-    return copyPath;
+    return copyPath
   }
-
 }
 
 function doCopy() {
-
-  //Read copy paths from inputs
+  // Read copy paths from inputs
   const copySource = document.getElementById('copy-from').value,
     copyPathOne = document.getElementById('copy-path-one').value,
-    copyPathTwo = document.getElementById('copy-path-two').value;
+    copyPathTwo = document.getElementById('copy-path-two').value
 
-  //Copy indicators
+  // Copy indicators
   const firstResult = document.getElementById('first-result'),
-    secondResult = document.getElementById('second-result');
+    secondResult = document.getElementById('second-result')
 
   let i = 0,
-    progress = 0;
+    progress = 0,
 
-  //Check wether a valid copy path exists
-  if (!copySource || !copyPathOne || !copyPathTwo) {
+    // Check wether a valid copy path exists
+    if (!copySource || !copyPathOne || !copyPathTwo) {
+      alert('ERREUR : Un des chemins de copie est invalide') // Displays errors to user
+    } else {
+      firstResult.innerHTML = 'Première copie en cours'
+      secondResult.innerHTML = 'Seconde copie en cours'
 
-    alert("ERREUR : Un des chemins de copie est invalide"); // Displays errors to user
-  } else {
-    firstResult.innerHTML = "Première copie en cours";
-    secondResult.innerHTML = "Seconde copie en cours";
+      // Launch copy process
+      do {
+        fs.stat(file, (err, stat) => {
+          let total = stat.size
+          let readableStream = fs.createReadStream(fileList[i])
 
-    //Launch copy process
-    do {
-      let readableStream = fs.createReadStream(fileList[i]);
+          let firstCopy = fs.createWriteStream(path.join(copyPathOne, fileName[i])),
+            secondCopy = fs.createWriteStream(path.join(copyPathTwo, fileName[i]))
+          // Every time readstream reads (Listen to stream events)
+          readableStream.on('data', (chunk) {
+            progress += chunk.length // FIXME: Where is total size?
+            console.log(Math.round(100 * progress / total))
+          })
 
-      let firstCopy = fs.createWriteStream(path.join(copyPathOne, fileName[i])),
-        secondCopy = fs.createWriteStream(path.join(copyPathTwo, fileName[i]));
+          readableStream.on('end', function() { // done
+            console.log('done !')
+          })
 
-      firstCopy.write(readableStream);
-      firstCopy.on('data', (chunk) => {
-          progress += chunk.length;
-          console.log("J'ai écrit " + Math.round(100 * progress / total) + "%");
+          readableStream.pipe(firstCopy)
+          readableStream.pipe(secondCopy)
+            ++i
         })
 
-        ++i;
 
-    } while (i < fileList.length);
 
-  }
-}
-
-function write() {
-  let ok = true; //Permet de savoir si le flux peut accepter de nouvelles écritures
-  while (i > 0 && ok) {
-    i--
-    if (i === 0) {
-      // on écrit le denier morceau, on passe donc le callback en 3ème paramètre
-      writer.write(data, encoding, callback)
-    } else {
-      // on écrit dans le stream et on stocke le succès ou l'échec de l'écriture
-      ok = writer.write(data, encoding)
+      } while (i < fileList.length)
     }
-  }
-  if (i > 0) {
-    // On ne déclenche une nouvelle écriture que lorsque le flux est prêt
-    writer.once('drain', write)
-  }
 }
 
 function walk(dir) {
   let
     n = 0,
-    size = 0;
+    size = 0
 
-  recursiveWalk(dir);
+  recursiveWalk(dir)
 
   function recursiveWalk(dir) {
-
     fs.readdirSync(dir).forEach(file => {
-
-      let fullPath = path.join(dir, file);
+      let fullPath = path.join(dir, file)
 
       if (fs.lstatSync(fullPath).isDirectory()) {
-        recursiveWalk(fullPath);
+        recursiveWalk(fullPath)
       } else {
-        size = fs.statSync(fullPath).size; //Get size of file
-        totalSize += size; //Calculate total size
-        fileName.push(file); //Store file name
-        fileList.push(fullPath); //Add copy path into array fileList
+        size = fs.statSync(fullPath).size // Get size of file
+        totalSize += size // Calculate total size
+        fileName.push(file) // Store file name
+        fileList.push(fullPath) // Add copy path into array fileList
       }
+    })
 
-    });
-
-    return fileList;
+    return fileList
   }
-  return recursiveWalk;
+  return recursiveWalk
 }
 
 function convertSize(size) {
   // Make size human-readable
-  let i = -1;
-  const byteUnits = [' ko', ' Mo', ' Go', ' To', ' Po', ' Eo', ' Zo', ' Yo'];
+  let i = -1
+  const byteUnits = [' ko', ' Mo', ' Go', ' To', ' Po', ' Eo', ' Zo', ' Yo']
   do {
-    size = size / 1000;
-    i++;
-  } while (size > 1000);
+    size = size / 1000
+    i++
+  } while (size > 1000)
 
-  return size = Math.max(size, 0.1).toFixed(1) + byteUnits[i]; //Return size
+  return size = Math.max(size, 0.1).toFixed(1) + byteUnits[i] // Return size
 }

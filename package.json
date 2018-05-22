@@ -13,7 +13,7 @@
   },
   "keywords": [],
   "author": "Gasparbsurde [Gaspard Bariller]",
-  "license": "GNU",
+  "license": "AGPL-3.0-or-later",
   "config": {
     "forge": {
       "make_targets": {

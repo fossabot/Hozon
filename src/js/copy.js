@@ -14,7 +14,7 @@ function copyFrom() {
     properties: ['openDirectory'],
   });
 
-  document.getElementById('copyFrom').value = copyFrom; //Write path in form input
+  document.getElementById('copy-from').value = copyFrom; //Write path in form input
   copyFrom = copyFrom.toString(); //Converts path to string
 
   walk(copyFrom); //Starts function
@@ -48,7 +48,7 @@ function copyDest(n) {
 function doCopy() {
 
   //Read copy paths from inputs
-  const copySource = document.getElementById('source-path').innerHTML,
+  const copySource = document.getElementById('copy-from').value,
     copyPathOne = document.getElementById('copy-path-one').value,
     copyPathTwo = document.getElementById('copy-path-two').value;
 

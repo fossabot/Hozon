@@ -56,7 +56,8 @@ function doCopy() {
   const firstResult = document.getElementById('first-result'),
     secondResult = document.getElementById('second-result');
 
-  let i = 0;
+  let i = 0,
+    progress = 0;
 
   //Check wether a valid copy path exists
   if (!copySource || !copyPathOne || !copyPathTwo) {
@@ -69,15 +70,38 @@ function doCopy() {
     //Launch copy process
     do {
       let readableStream = fs.createReadStream(fileList[i]);
+
       let firstCopy = fs.createWriteStream(path.join(copyPathOne, fileName[i])),
         secondCopy = fs.createWriteStream(path.join(copyPathTwo, fileName[i]));
 
-      readableStream.pipe(firstCopy);
-      readableStream.pipe(secondCopy);
-      ++i;
+      firstCopy.write(readableStream);
+      firstCopy.on('data', (chunk) => {
+          progress += chunk.length;
+          console.log("J'ai écrit " + Math.round(100 * progress / total) + "%");
+        })
+
+        ++i;
 
     } while (i < fileList.length);
 
+  }
+}
+
+function write() {
+  let ok = true; //Permet de savoir si le flux peut accepter de nouvelles écritures
+  while (i > 0 && ok) {
+    i--
+    if (i === 0) {
+      // on écrit le denier morceau, on passe donc le callback en 3ème paramètre
+      writer.write(data, encoding, callback)
+    } else {
+      // on écrit dans le stream et on stocke le succès ou l'échec de l'écriture
+      ok = writer.write(data, encoding)
+    }
+  }
+  if (i > 0) {
+    // On ne déclenche une nouvelle écriture que lorsque le flux est prêt
+    writer.once('drain', write)
   }
 }
 

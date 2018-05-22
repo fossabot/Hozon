@@ -14,6 +14,7 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 1000,
+    icon: __dirname + '/img/logo.png'
   });
 
   // and load the index.html of the app.

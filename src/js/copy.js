@@ -68,13 +68,12 @@ function doCopy() {
 
     //Launch copy process
     do {
-      var readableStream = fs.createReadStream(fileList[i]);
-      var writableStream = fs.createWriteStream(copyPathOne, fileName[i]);
+      let readableStream = fs.createReadStream(fileList[i]);
+      let firstCopy = fs.createWriteStream(path.join(copyPathOne, fileName[i])),
+        secondCopy = fs.createWriteStream(path.join(copyPathTwo, fileName[i]));
 
-      readableStream.pipe(writableStream);
-
-      //console.log('fileName : ' + fileName[i]); // TEMP
-      //console.log('fileList : ' + fileList[i]); // TEMP
+      readableStream.pipe(firstCopy);
+      readableStream.pipe(secondCopy);
       ++i;
 
     } while (i < fileList.length);

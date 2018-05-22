@@ -10,7 +10,7 @@ let totalSize = 0,
   fileList = [],
   fileName = []
 
-function copyFrom() {
+function copyFrom () {
   // Select a directory
   let copyFrom = dialog.showOpenDialog({
     properties: ['openDirectory']
@@ -30,7 +30,7 @@ function copyFrom() {
   }
 }
 
-function copyDest(n) {
+function copyDest (n) {
   var copyPath = dialog.showOpenDialog({
     properties: ['openDirectory']
   })
@@ -47,7 +47,7 @@ function copyDest(n) {
   }
 }
 
-function doCopy() {
+function doCopy () {
   // Read copy paths from inputs
   const copySource = document.getElementById('copy-from').value,
     copyPathOne = document.getElementById('copy-path-one').value,
@@ -58,52 +58,49 @@ function doCopy() {
     secondResult = document.getElementById('second-result')
 
   let i = 0,
-    progress = 0,
+    progress = 0
 
     // Check wether a valid copy path exists
-    if (!copySource || !copyPathOne || !copyPathTwo) {
-      alert('ERREUR : Un des chemins de copie est invalide') // Displays errors to user
-    } else {
-      firstResult.innerHTML = 'Première copie en cours'
-      secondResult.innerHTML = 'Seconde copie en cours'
+  if (!copySource || !copyPathOne || !copyPathTwo) {
+    alert('ERREUR : Un des chemins de copie est invalide') // Displays errors to user
+  } else {
+    firstResult.innerHTML = 'Première copie en cours'
+    secondResult.innerHTML = 'Seconde copie en cours'
 
       // Launch copy process
-      do {
-        fs.stat(file, (err, stat) => {
-          let total = stat.size
-          let readableStream = fs.createReadStream(fileList[i])
+    do {
+          // let total = stat.size
+      let readableStream = fs.createReadStream(fileList[i])
 
-          let firstCopy = fs.createWriteStream(path.join(copyPathOne, fileName[i])),
-            secondCopy = fs.createWriteStream(path.join(copyPathTwo, fileName[i]))
+      let firstCopy = fs.createWriteStream(path.join(copyPathOne, fileName[i]))
+      let secondCopy = fs.createWriteStream(path.join(copyPathTwo, fileName[i]))
+
+      readableStream.pipe(firstCopy)
+
           // Every time readstream reads (Listen to stream events)
-          readableStream.on('data', (chunk) {
-            progress += chunk.length // FIXME: Where is total size?
-            console.log(Math.round(100 * progress / total))
-          })
+      readableStream.on('data', function (chunk) {
+        progress += chunk.length
+        console.log(progress)
+      })
 
-          readableStream.on('end', function() { // done
-            console.log('done !')
-          })
+      readableStream.on('end', function () { // done
+        console.log('done !')
+      })
 
-          readableStream.pipe(firstCopy)
-          readableStream.pipe(secondCopy)
-            ++i
-        })
-
-
-
-      } while (i < fileList.length)
-    }
+      readableStream.pipe(secondCopy)
+      ++i
+    } while (i < fileList.length)
+  }
 }
 
-function walk(dir) {
+function walk (dir) {
   let
     n = 0,
     size = 0
 
   recursiveWalk(dir)
 
-  function recursiveWalk(dir) {
+  function recursiveWalk (dir) {
     fs.readdirSync(dir).forEach(file => {
       let fullPath = path.join(dir, file)
 
@@ -122,7 +119,7 @@ function walk(dir) {
   return recursiveWalk
 }
 
-function convertSize(size) {
+function convertSize (size) {
   // Make size human-readable
   let i = -1
   const byteUnits = [' ko', ' Mo', ' Go', ' To', ' Po', ' Eo', ' Zo', ' Yo']

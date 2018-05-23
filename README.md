@@ -1,5 +1,5 @@
 # Hozon
-<p><img src="https://travis-ci.org/Gasparbsurde/Hozon.svg?branch=master" alt="build: passing"/> <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="Standard - JavaScript Style Guide"></a> <a href="https://david-dm.org/Gasparbsurde/Hozon.svg"><img src="https://david-dm.org/Gasparbsurde/Hozon.svg" alt="Dependencies check" /></a><p>
+<img src="https://travis-ci.org/Gasparbsurde/Hozon.svg?branch=master" alt="build: passing"/> <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="Standard - JavaScript Style Guide"></a> <a href="https://david-dm.org/Gasparbsurde/Hozon.svg"><img src="https://david-dm.org/Gasparbsurde/Hozon" alt="Dependencies check" /></a>
 
 Hozon - système professionnel de double copie
 

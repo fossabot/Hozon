@@ -13,7 +13,7 @@
   },
   "keywords": [],
   "author": "Gasparbsurde [Gaspard Bariller]",
-  "license": "AGPL-3.0-or-later",
+  "license": "MIT",
   "config": {
     "forge": {
       "make_targets": {
